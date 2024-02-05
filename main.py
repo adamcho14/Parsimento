@@ -28,11 +28,16 @@ print(partimento.get_key_signature())
 #for i in rule[chord.Chord][3]:
     #print(i)
 
-real = Realization(Partimento("Fenaroli-Octave_Rule_Broken.musicxml"), "Fenaroli-Octave_Rule_Broken.mid")
+real = Realization(Partimento("Fenaroli-Octave_Rule_Altered.musicxml"), "Fenaroli-Octave_Rule_Altered.mid")
 
 rule = Rule(Partimento("Fenaroli-Octave_Rule_Asc_bass.musicxml"), "Fenaroli-Octave_Rule_Asc.mid", "", 1)
 
-print(rule.apply_rule(real, 4))
+ruleset = Ruleset("Octave-Rule")
+ruleset.add(rule)
+
+ruleset.evaluate(real)
+
+#print(rule.apply_rule(real, 0))
 
 #for i in range(len(rule.partimento.bass.pitches)):
     #print(rule.get_interval_classes(i))

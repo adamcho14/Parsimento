@@ -107,15 +107,15 @@ class Rule(Realization):
             explained = []  # ofset contains explained realization indices
             i = start + 1
             j = offset + 1
-            explained.append(start) #we already checked that earlier so we can pass
-            print("Added:", i, j)
+            explained.append(offset) #we already checked that earlier so we can pass
+            print("Added (position in rule, position in realization):", start, offset)
             cont = True
             #had a large while conjunction which I broke
             while i < len(bassline.scale_degress) and j < len(part.bass.pitches) and cont:
                 if self.partimento.scale_degress[i] == realization.partimento.scale_degress[j]:
                     if realization.get_interval_classes(j) == self.get_interval_classes(i):
                         explained.append(j)
-                        print("Added:", i, j)
+                        print("Added (position in rule, position in realization):", i, j)
                         i += 1
                         j += 1
                     else:
@@ -153,7 +153,7 @@ class Ruleset:
 
             # we go through the rule and try to find at least one match
             for rule in self.rules:
-                print(rule, rule.apply_rule())
+                print(rule, rule.apply_rule(realization, i))
 
 
 

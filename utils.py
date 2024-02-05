@@ -94,13 +94,13 @@ class Rule(Realization):
         cont = True
         # I scan the rule until the end and seach for at least min_req bass notes that meet the rule
         bassline = self.partimento
-        j = 0
         # I search for possible rule notes matching the first note of the realization
         for j in range(len(bassline.scale_degress)):
             scale_degree = part.scale_degress[offset]
             if self.partimento.scale_degress[j] == scale_degree: #if we found the desired scale degree
                 if realization.get_interval_classes(offset) == self.get_interval_classes(j): #if it is explained we move to the following realization note
                     possible_starts.append(j)
+                    print("Start:", j)
 
         #we have starts of the sequences, now we check the whole string
         for start in possible_starts:
@@ -108,8 +108,21 @@ class Rule(Realization):
             i = start + 1
             j = offset + 1
             explained.append(start) #we already checked that earlier so we can pass
-            while j < len(part.bass.pitches) and realization.get_interval_classes(j) == self.get_interval_classes(i):
-                explained.append(j)
+            print("Added:", i, j)
+            cont = True
+            #had a large while conjunction which I broke
+            while i < len(bassline.scale_degress) and j < len(part.bass.pitches) and cont:
+                if self.partimento.scale_degress[i] == realization.partimento.scale_degress[j]:
+                    if realization.get_interval_classes(j) == self.get_interval_classes(i):
+                        explained.append(j)
+                        print("Added:", i, j)
+                        i += 1
+                        j += 1
+                    else:
+                        cont = False
+                else:
+                    cont = False
+
             if len(set(explained)) >= self.min_req:
                 return set(explained)
 

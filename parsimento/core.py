@@ -1,6 +1,8 @@
 from music21 import *
 import pandas as pd
 
+#TODO: každá trieda do zvlášť súboru
+
 # we assume that the bass line ends with a tonic (because sometimes it can start with a dominant)
 # the second thing we assume is that
 
@@ -47,7 +49,7 @@ class Partimento:
         scale_degrees = []
         sc = scale.MajorScale(self.key_signature)
         if self.tonality == "m":
-            #Fenaroli's Octave Rule works with Melodic Minor Scale
+            # Fenaroli's Octave Rule works with Melodic Minor Scale
             sc = scale.MelodicMinorScale(self.key_signature)
 
 
@@ -92,11 +94,13 @@ class Rule(Realization):
         possible_starts = []
         part = realization.partimento
         cont = True
-        # I scan the rule until the end and seach for at least min_req bass notes that meet the rule
+        # I scan the rule until the end and search for at least min_req bass notes that meet the rule
         bassline = self.partimento
         # I search for possible rule notes matching the first note of the realization
         for j in range(len(bassline.scale_degress)):
             scale_degree = part.scale_degress[offset]
+            #print("SD:", scale_degree)
+            #print(self.partimento.scale_degress[j], self.partimento.key_signature)
             if self.partimento.scale_degress[j] == scale_degree: #if we found the desired scale degree
                 if realization.get_interval_classes(offset) == self.get_interval_classes(j): #if it is explained we move to the following realization note
                     possible_starts.append(j)
@@ -150,10 +154,15 @@ class Ruleset:
         for i in range(len(part.bass.pitches)):
             #pitch = part.bass.pitches[i] #we get interval classes of the chord corresponding to the current pitch
             scale_degree = part.scale_degress[i]
+            print("Explaining:", i)
 
             # we go through the rule and try to find at least one match
             for rule in self.rules:
-                print(rule, rule.apply_rule(realization, i))
+                exp = rule.apply_rule(realization, i)
+                print(rule.origin, exp)
+                if exp and i in exp:
+                    explained[i] = True
+        return explained
 
 
 

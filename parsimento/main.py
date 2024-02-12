@@ -28,10 +28,10 @@ from core import *
 #for i in rule[chord.Chord][3]:
     #print(i)
 
-real = Realization(Partimento("../basses/Fenaroli-Octave_Rule_Altered.musicxml"),
+''''real = Realization(Partimento("../basses/Fenaroli-Octave_Rule_Altered.musicxml"),
                    "../realizations/Fenaroli-Octave_Rule_Altered.mid")
 
-''''rule = Rule(Partimento("../rules/old_versions/Fenaroli-Octave_Rule_Asc_bass.musicxml"),
+rule = Rule(Partimento("../rules/old_versions/Fenaroli-Octave_Rule_Asc_bass.musicxml"),
             "../rules/old_versions/Fenaroli-Octave_Rule_Asc.mid", "", 1)
 cadence = Rule(Partimento("../rules/old_versions/Fenaroli-Cadence_quarter.musicxml"),
                "../rules/old_versions/Fenaroli-Cadence_quarter.mid", "", 3)
@@ -47,7 +47,7 @@ print(ruleset.evaluate(real))
 #print(rule.apply_rule(real, 0))
 
 #for i in range(len(rule.partimento.bass.pitches)):
-    #print(rule.get_interval_classes(i))
+    #print(rule.get_interval_classes(i)
     
     
 
@@ -59,5 +59,13 @@ print(ruleset.evaluate(real))
 
 #key = partimento.analyze('key')
 #print(key.name) '''''
+
+rule = Rule("rules/rule_of_the_octave/Rule-of-the-Octave_Maj_6-1.musicxml", "")
+
+sc = scale.MajorScale("G")
+
+print(sc.getScaleDegreeAndAccidentalFromPitch(rule.statement.parts[1].pitches[0]))
+
+
 
 

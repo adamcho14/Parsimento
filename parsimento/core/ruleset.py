@@ -1,6 +1,6 @@
-from rule import *
-from realization import *
-from partimento import *
+from .rule import *
+from .realization import *
+from .partimento import *
 
 # This class enables us to analyze a partimento realization according to a given set of rules
 class Ruleset:
@@ -30,6 +30,6 @@ class Ruleset:
             for rule in self.rules:
                 exp = rule.apply_rule(realization, i)
                 print(rule.origin, exp)
-                if exp and i in exp:
+                if exp:
                     explained[i] = True
         return explained

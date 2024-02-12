@@ -31,8 +31,10 @@ from core import *
 real = Realization(Partimento("../basses/Fenaroli-Octave_Rule_Altered.musicxml"),
                    "../realizations/Fenaroli-Octave_Rule_Altered.mid")
 
-rule = Rule(Partimento("../rules/Fenaroli-Octave_Rule_Asc_bass.musicxml"), "../rules/Fenaroli-Octave_Rule_Asc.mid", "", 1)
-cadence = Rule(Partimento("../rules/Fenaroli-Cadence_quarter.musicxml"), "../rules/Fenaroli-Cadence_quarter.mid", "", 3)
+''''rule = Rule(Partimento("../rules/old_versions/Fenaroli-Octave_Rule_Asc_bass.musicxml"),
+            "../rules/old_versions/Fenaroli-Octave_Rule_Asc.mid", "", 1)
+cadence = Rule(Partimento("../rules/old_versions/Fenaroli-Cadence_quarter.musicxml"),
+               "../rules/old_versions/Fenaroli-Cadence_quarter.mid", "", 3)
 
 print(rule.partimento.scale_degress)
 
@@ -46,6 +48,8 @@ print(ruleset.evaluate(real))
 
 #for i in range(len(rule.partimento.bass.pitches)):
     #print(rule.get_interval_classes(i))
+    
+    
 
 
 
@@ -54,4 +58,6 @@ print(ruleset.evaluate(real))
 
 
 #key = partimento.analyze('key')
-#print(key.name)
+#print(key.name) '''''
+
+

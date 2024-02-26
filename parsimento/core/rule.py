@@ -11,13 +11,14 @@ from .realization import *
 # we need to set up the minimmum requirement in terms of number of subsequent bass notes to be explained in order to succesfully apply the rule
 class Rule():
     def __init__(self, musicxml_file: str, category):
-        self.statement = converter.parse(musicxml_file)
+        self.rule = converter.parse(musicxml_file)
         self.category = category
+        self.origin = musicxml_file
 
     def get_interval_classes(self, i: int):
         intervals = []
-        for note in self.statement[chord.Chord][i]:
-            intervals.append(interval.Interval(self.statement.parts[1].pitches[i], note).simpleName)
+        for note in self.rule[chord.Chord][i]:
+            intervals.append(interval.Interval(self.rule.parts[1].pitches[i], note).simpleName)
         return set(intervals)
 
 
@@ -25,13 +26,20 @@ class Rule():
     # so far this implementation
     def apply_rule(self, realization: Realization, start: int):
         explained = False
-        rule_bass_notes = self.statement.parts[1].pitches
+        rule_bass_notes = self.rule.parts[1].pitches
         sc = scale.MajorScale("G")
-        if realization.partimento.scale_degress[start] == sc.getScaleDegreeAndAccidentalFromPitch(self.statement.parts[1].pitches[0]) \
-                and realization.partimento.scale_degress[start+1] == sc.getScaleDegreeAndAccidentalFromPitch(self.statement.parts[1].pitches[1]):
+        """"print (realization.partimento.scale_degrees[start],
+               sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[0]),
+               realization.partimento.scale_degrees[start + 1],
+               sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[1]))"""""
+        if realization.partimento.scale_degrees[start] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[0]) \
+                and realization.partimento.scale_degrees[start + 1] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[1]):
             if realization.get_interval_classes(start) == self.get_interval_classes(0):
                 explained = True
         return explained
+
+    # TODO: zabalit porovnanie do metody (napr. compare_pitch_sets)
+    # TODO: unit testy
 
 
 

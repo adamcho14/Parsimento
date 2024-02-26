@@ -5,7 +5,7 @@ class Partimento:
     def __init__(self, filename: str):
         self.bass = converter.parse(filename)
         self.key_signature, self.tonality = self.key_signature_analysis()
-        self.scale_degress = self.scale_degree_analysis()
+        self.scale_degrees = self.scale_degree_analysis()
         self.origin = filename
         self.name = filename
 
@@ -30,9 +30,9 @@ class Partimento:
     def scale_degree_analysis(self):
         scale_degrees = []
         sc = scale.MajorScale(self.key_signature)
-        if self.tonality == "m":
+        #if self.tonality == "m":
             # Fenaroli's Octave Rule works with Melodic Minor Scale
-            sc = scale.MelodicMinorScale(self.key_signature)
+            #sc = scale.MelodicMinorScale(self.key_signature)
 
 
         for pitch in self.bass.pitches:

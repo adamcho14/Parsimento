@@ -1,5 +1,6 @@
 from music21 import *
 from core import *
+import os
 
 # ---Version 0.0:---
 # so far working on pieces WITHOUT transposition and The Rule of the Octave
@@ -60,11 +61,24 @@ print(ruleset.evaluate(real))
 #key = partimento.analyze('key')
 #print(key.name) '''''
 
-rule = Rule("rules/rule_of_the_octave/Rule-of-the-Octave_Maj_6-1.musicxml", "")
 
-sc = scale.MajorScale("G")
+partimento = Partimento("basses/Fenaroli-Octave_Rule_Altered.musicxml")
+realization = Realization(partimento, "realizations/Fenaroli-Octave_Rule_Altered_wrong.mid")
+octave_rule = Ruleset("Octave-Rule")
 
-print(sc.getScaleDegreeAndAccidentalFromPitch(rule.statement.parts[1].pitches[0]))
+directory = 'rules/rule_of_the_octave'
+
+# iterate over files in
+# that directory
+
+octave_rule.bulk_upload(directory=directory)
+
+print(partimento.scale_degrees)
+
+
+print(octave_rule.evaluate(realization))
+
+
 
 
 

@@ -72,10 +72,6 @@ directory = 'rules/rule_of_the_octave'
 # that directory
 
 octave_rule.bulk_upload(directory=directory)
-
-print(partimento.scale_degrees)
-
-
 print(octave_rule.evaluate(realization))
 
 

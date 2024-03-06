@@ -1,5 +1,5 @@
-from music21 import *
-from .partimento import *
+from .partimento import Partimento
+from music21 import converter, chord, interval
 
 class Realization:
     def __init__(self, partimento: Partimento, filename: str):

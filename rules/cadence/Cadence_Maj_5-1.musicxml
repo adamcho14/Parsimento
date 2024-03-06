@@ -8,7 +8,7 @@
     <creator type="composer">Composer / arranger</creator>
     <encoding>
       <software>MuseScore 4.2.1</software>
-      <encoding-date>2024-02-12</encoding-date>
+      <encoding-date>2024-03-05</encoding-date>
       <supports element="accidental" type="yes"/>
       <supports element="beam" type="yes"/>
       <supports element="print" attribute="new-page" type="no"/>
@@ -56,6 +56,18 @@
         </attributes>
       <note>
         <pitch>
+          <step>A</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <staff>1</staff>
+        </note>
+      <note>
+        <chord/>
+        <pitch>
           <step>C</step>
           <octave>5</octave>
           </pitch>
@@ -91,18 +103,6 @@
         <staff>1</staff>
         </note>
       <note>
-        <chord/>
-        <pitch>
-          <step>A</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>down</stem>
-        <staff>1</staff>
-        </note>
-      <note>
         <rest/>
         <duration>1</duration>
         <voice>1</voice>
@@ -114,8 +114,7 @@
         </backup>
       <note>
         <pitch>
-          <step>F</step>
-          <alter>1</alter>
+          <step>D</step>
           <octave>3</octave>
           </pitch>
         <duration>1</duration>
@@ -126,8 +125,8 @@
         </note>
       <note>
         <pitch>
-          <step>D</step>
-          <octave>3</octave>
+          <step>G</step>
+          <octave>2</octave>
           </pitch>
         <duration>1</duration>
         <voice>5</voice>

@@ -1,9 +1,11 @@
-from music21 import *
+import music21
+from music21.interval import Interval
+from music21.scale import MajorScale, MelodicMinorScale
 
 #Partimento requires a musicxml file
 class Partimento:
     def __init__(self, filename: str):
-        self.bass = converter.parse(filename)
+        self.bass = music21.converter.parse(filename)
         self.key_signature, self.tonality = self.key_signature_analysis()
         self.scale_degrees = self.scale_degree_analysis()
         self.origin = filename
@@ -16,10 +18,10 @@ class Partimento:
         bass_tonality = "N/A"
 
         for p in pitches:
-            if interval.Interval(pitches[-1], p).simpleName == "M3":
+            if Interval(pitches[-1], p).simpleName == "M3":
                 bass_tonality = "M"
                 break
-            if interval.Interval(pitches[-1], p).simpleName == "m3":
+            if Interval(pitches[-1], p).simpleName == "m3":
                 bass_tonality = "m"
                 break
         return bass_key, bass_tonality
@@ -29,10 +31,10 @@ class Partimento:
 
     def scale_degree_analysis(self):
         scale_degrees = []
-        sc = scale.MajorScale(self.key_signature)
-        #if self.tonality == "m":
+        sc = MajorScale(self.key_signature)
+        if self.tonality == "m":
             # Fenaroli's Octave Rule works with Melodic Minor Scale
-            #sc = scale.MelodicMinorScale(self.key_signature)
+            sc = MelodicMinorScale(self.key_signature)
 
 
         for pitch in self.bass.pitches:

@@ -68,20 +68,7 @@
       <note>
         <chord/>
         <pitch>
-          <step>F</step>
-          <alter>1</alter>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>down</stem>
-        <staff>1</staff>
-        </note>
-      <note>
-        <chord/>
-        <pitch>
-          <step>A</step>
+          <step>G</step>
           <octave>5</octave>
           </pitch>
         <duration>1</duration>
@@ -102,8 +89,8 @@
         </backup>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>3</octave>
+          <step>B</step>
+          <octave>2</octave>
           </pitch>
         <duration>1</duration>
         <voice>5</voice>
@@ -113,7 +100,7 @@
         </note>
       <note>
         <pitch>
-          <step>B</step>
+          <step>A</step>
           <octave>2</octave>
           </pitch>
         <duration>1</duration>

@@ -16,21 +16,21 @@ class TestParsimento(unittest.TestCase):
         filename = "Fenaroli_Octave_G"
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
-        self.assertEqual(self.ruleset.evaluate(realization), [True] * 15 + [False])
+        self.assertEqual(self.ruleset.evaluate(realization), [True] * 16)
 
     def test_transposed_octave_rule(self):
         """Test octave rule in both directions, but this time transposed to C major."""
         filename = "Fenaroli_Octave_C"
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
-        self.assertEqual(self.ruleset.evaluate(realization), [True] * 15 + [False])
+        self.assertEqual(self.ruleset.evaluate(realization), [True] * 16)
 
     def test_dandrieu(self):
         """Test Dandrieu's exercise with diminished 5th and cadence"""
         filename = "Dandrieu_Dim-Fifth_G"
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
-        self.assertEqual(self.ruleset.evaluate(realization), [True] * 8 + [False])
+        self.assertEqual(self.ruleset.evaluate(realization), [True] * 9)
 
     def test_alignment_of_dandrieu(self):
         """Test alignment of Dandrieu's exercise.
@@ -39,7 +39,7 @@ class TestParsimento(unittest.TestCase):
         filename = "Dandrieu_Dim-Fifth-unaligned_G"
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
-        self.assertEqual(self.ruleset.evaluate(realization), [True] * 8 + [False])
+        self.assertEqual(self.ruleset.evaluate(realization), [True] * 9)
 
 
 if __name__ == '__main__':

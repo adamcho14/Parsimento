@@ -34,7 +34,8 @@ class Rule:
         #_scale_degrees = realization.partimento.scale_degrees
         _scale_degrees = realization.scale_degrees
         first_note_scale_degree_matches = _scale_degrees[start] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[0])
-        second_note_scale_degree_matches = _scale_degrees[start+1] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[1])
+        last = start == len(_scale_degrees) - 1
+        second_note_scale_degree_matches = last or (_scale_degrees[start+1] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[1]))
         if first_note_scale_degree_matches \
                 and second_note_scale_degree_matches:
             if realization.get_interval_classes(start) == self.get_interval_classes(0):

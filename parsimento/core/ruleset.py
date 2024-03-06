@@ -28,7 +28,7 @@ class Ruleset:
         We go pitch by pitch, neglecting rhytmical patterns in this implementation."""
         #partimento = realization.partimento
         explained = [False] * len(realization.bass_pitches) # we tick all progression that have followed a particular rule as explained
-        for pitch_idx in range(len(realization.bass_pitches) - 1): # originally (and also the above line) partimento.bass.pitches
+        for pitch_idx in range(len(realization.bass_pitches)): # originally (and also the above line) partimento.bass.pitches
             # pitch = part.bass.pitches[i] # we get interval classes of the chord corresponding to the current pitch
             print("Explaining:", pitch_idx)
 

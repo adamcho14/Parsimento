@@ -1,5 +1,6 @@
 import argparse
 import core
+from music21 import chord, note
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--ruleset_dir", nargs="*", default=["rules/cadence" ,"rules/rule_of_the_octave"], type=str, help="Rule set directories.")
@@ -12,6 +13,7 @@ def main(args: argparse.Namespace) -> []:
         ruleset.bulk_upload(rule)
     partimento = core.Partimento(args.partimento_file)
     realization =  core.Realization(partimento=partimento, filename=args.realization_file)
+    print(align(realization))
     return ruleset.evaluate(realization)
 
 if __name__ == "__main__":

@@ -2,8 +2,10 @@ import music21
 from music21.interval import Interval
 from music21.scale import MajorScale, MelodicMinorScale
 
-#Partimento requires a musicxml file
+# TODO: it seems to be better not to initialize classes directly from files, but rather create wrapper functions that enable it
 class Partimento:
+    """This class represents a partimento. It required as musicxml file,
+    as a partimento is supposed to be anexample or exercise written in a score."""
     def __init__(self, filename: str):
         self.bass = music21.converter.parse(filename)
         self.key_signature, self.tonality = self.key_signature_analysis()

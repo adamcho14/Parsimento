@@ -1,4 +1,4 @@
-from .realization import *
+from .realization import Realization
 import music21
 from music21.chord import Chord
 from music21.interval import Interval
@@ -25,18 +25,22 @@ class Rule:
 
     def apply_rule(self, realization: Realization, start: int):
         """This method compares the current scale degree with the situation encoded in the rule.
-        It checks whether the scale degrees of the current and """
+        It checks whether the scale degrees of the current and next bass note match with the rule bass notes
+        and whether the chords based on the first note of the rule and the current note match."""
         explained = False
         rule_bass_notes = self.rule.parts[1].pitches
         sc = MajorScale("G")
 
-        _scale_degrees = realization.partimento.scale_degrees
+        #_scale_degrees = realization.partimento.scale_degrees
+        _scale_degrees = realization.scale_degrees
         first_note_scale_degree_matches = _scale_degrees[start] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[0])
         second_note_scale_degree_matches = _scale_degrees[start+1] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[1])
         if first_note_scale_degree_matches \
                 and second_note_scale_degree_matches:
             if realization.get_interval_classes(start) == self.get_interval_classes(0):
                 explained = True
+            else:
+                print(_scale_degrees[start], realization.get_interval_classes(start), self.get_interval_classes(0))
         return explained
 
     # TODO: zabalit porovnanie do metody (napr. compare_pitch_sets)

@@ -33,9 +33,7 @@ class Rule:
 
         #_scale_degrees = realization.partimento.scale_degrees
         _bassline_scale_degrees = realization.scale_degrees
-        # TODO: In order to enable flexible rule length, we need to change how the rules are iterated.
-        # The iteration cannot be fixed of len 2, but it has to go through all the bass notes in the rule.
-        # We also want to satisfy rules that check for special cases of notes to be included in order to process prepared dissonances.
+        # TODO: We want to satisfy rules that check for special cases of notes to be included in order to process prepared dissonances.
         # Because of this, this function cannot check whether the chords in the realization are
         # Example: case 5 4 chord: the 4th has to be prepared. Let's have a sequence of bass degrees IV, V, V, I.
         # Let's imaging two chord progressions here:
@@ -47,11 +45,15 @@ class Rule:
         # However, in other computation stream, we have a rule of len 3 specifying
         # that every realization that has the not corresponding to V^(4) right before the cadential V^(54) - V^(53) is valid.
 
-        first_note_scale_degree_matches = _bassline_scale_degrees[start] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[0])
-        is_last = start == len(_bassline_scale_degrees) - 1
-        second_note_scale_degree_matches = is_last or (_bassline_scale_degrees[start+1] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[1]))
-        if first_note_scale_degree_matches \
-                and second_note_scale_degree_matches:
+        matches = True
+        for increment, rule_bass_note in enumerate(rule_bass_notes):
+            idx = start+increment
+            if (idx < len(_bassline_scale_degrees)
+                    and _bassline_scale_degrees[idx] != sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_note)):
+                matches = False
+                break
+
+        if matches:
             if realization.get_interval_classes(start) == self.get_interval_classes(0):
                 explained = True
             else:

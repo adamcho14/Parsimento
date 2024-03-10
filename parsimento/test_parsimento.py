@@ -42,11 +42,18 @@ class TestParsimento(unittest.TestCase):
         self.assertEqual(self.ruleset.evaluate(realization), [True] * 9)
 
     def test_fenaroli_1_1_end(self):
-        """Test end of Fenaroli's' Book 1 Example 1, including octave rule, cadence and unaligned chords."""
+        """Test end of Fenaroli Book 1 Example 1, including octave rule, cadence and unaligned chords."""
         filename = "Fenaroli_1-1_end"
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         self.assertEqual(self.ruleset.evaluate(realization), [True] * 17)
+
+    def test_romanesca(self):
+        """Test end of Fenaroli Book 1 Example 1, including octave rule, cadence and unaligned chords."""
+        filename = "Romanesca"
+        partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
+        realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
+        self.assertEqual(self.ruleset.evaluate(realization), [True, True, False, False, False, True, False] + [True] * 5)
 
 
 if __name__ == '__main__':

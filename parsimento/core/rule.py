@@ -32,20 +32,33 @@ class Rule:
         sc = MajorScale("G")
 
         #_scale_degrees = realization.partimento.scale_degrees
-        _scale_degrees = realization.scale_degrees
-        first_note_scale_degree_matches = _scale_degrees[start] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[0])
-        last = start == len(_scale_degrees) - 1
-        second_note_scale_degree_matches = last or (_scale_degrees[start+1] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[1]))
+        _bassline_scale_degrees = realization.scale_degrees
+        # TODO: In order to enable flexible rule length, we need to change how the rules are iterated.
+        # The iteration cannot be fixed of len 2, but it has to go through all the bass notes in the rule.
+        # We also want to satisfy rules that check for special cases of notes to be included in order to process prepared dissonances.
+        # Because of this, this function cannot check whether the chords in the realization are
+        # Example: case 5 4 chord: the 4th has to be prepared. Let's have a sequence of bass degrees IV, V, V, I.
+        # Let's imaging two chord progressions here:
+        # (1) IV^(65), V^(54), V^(53), I^(53);
+        # (2) IV^(6), V^(54), V^(53), I^(53).
+        # In (1): We need to imagine that this works like a non-deterministic automaton.
+        # The 4th degree (IV) can be explained by the rule 4-5,
+        # but then we end up with a problem because we don't have a rule 5-5, where the chord are 54 - 53.
+        # However, in other computation stream, we have a rule of len 3 specifying
+        # that every realization that has the not corresponding to V^(4) right before the cadential V^(54) - V^(53) is valid.
+
+        first_note_scale_degree_matches = _bassline_scale_degrees[start] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[0])
+        is_last = start == len(_bassline_scale_degrees) - 1
+        second_note_scale_degree_matches = is_last or (_bassline_scale_degrees[start+1] == sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_notes[1]))
         if first_note_scale_degree_matches \
                 and second_note_scale_degree_matches:
             if realization.get_interval_classes(start) == self.get_interval_classes(0):
                 explained = True
             else:
-                print(_scale_degrees[start], realization.get_interval_classes(start), self.get_interval_classes(0))
+                print(_bassline_scale_degrees[start], realization.get_interval_classes(start), self.get_interval_classes(0))
         return explained
 
     # TODO: zabalit porovnanie do metody (napr. compare_pitch_sets)
-    # TODO: unit testy
 
 
 

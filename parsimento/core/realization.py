@@ -4,13 +4,9 @@ from music21 import converter, chord, interval, note
 class Realization:
     """This class represents a partimento realization originally stored in a MIDI file."""
     def __init__(self, partimento: Partimento, filename: str):
-        # the question is: what am I actually using from the partimento?
-        # Do I need to store the whole partimento or just its scale degrees (after alignment?
         self.partimento = partimento
         self.realization = converter.parse(filename)
         self.origin = filename
-        # TODO: this is just temporary. We want that the whole partimento class changes, but this required a more thorough intervention
-        # Or is it a better idea not to store the whole partimento, but just its bass pitches and scale degrees?
         self.bass_pitches, self.scale_degrees = self.align()
 
     def get_interval_classes(self, i: int):

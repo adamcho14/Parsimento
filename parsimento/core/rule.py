@@ -1,7 +1,7 @@
 from .realization import Realization, get_interval_classes
 import music21
+from music21.note import Note, Rest
 from music21.chord import Chord
-from music21.interval import Interval
 from music21.scale import MajorScale
 
 class Rule:
@@ -17,7 +17,7 @@ class Rule:
         self.origin = musicxml_file
 
     def get_interval_classes(self, i: int):
-        return get_interval_classes(self.rule.parts[1].pitches[i], self.rule[Chord][i])
+        return get_interval_classes(self.rule.parts[1].pitches[i], self.rule.parts[0][Rest, Note, Chord][i])
 
     def apply_rule(self, realization: Realization, start: int):
         """This method compares the current scale degree with the situation encoded in the rule.
@@ -47,32 +47,38 @@ class Rule:
         applicable_rule_len = len(rule_bass_notes) - 1
         realization_len = len(_bassline_scale_degrees)
 
+        # Checking for the third part - required notes in the right hand harmony
+        minimal_required_harmonies = [set() for _ in range(applicable_rule_len)]
+        if len(self.rule.parts) > 2:
+            for harmony_idx, required_harmony in enumerate(self.rule.parts[2][Rest, Note, Chord]):
+                if not required_harmony.isRest:
+                    minimal_required_harmonies[harmony_idx] = get_interval_classes(rule_bass_notes[harmony_idx], required_harmony)
+        print("Minimal:", minimal_required_harmonies)
+
+
         explained = [False] * applicable_rule_len
 
-        matches = True
+        is_bass_degree_match = True
         for rule_position, rule_bass_note in enumerate(rule_bass_notes):
             realization_position = start + rule_position
             if (realization_position < realization_len
                     and _bassline_scale_degrees[realization_position] != sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_note)):
-                matches = False
+                is_bass_degree_match = False
                 print("Doesn't match at position:", rule_position)
-                break
+                return [False]
 
-        if matches:
+        if is_bass_degree_match:
             for rule_position in range(applicable_rule_len):
                 realization_position = start + rule_position
-                if (realization_position < realization_len
-                    and realization.get_interval_classes(realization_position).issubset(self.get_interval_classes(rule_position))):
-                    explained[rule_position] = True
-                else:
-                    print("Interval classes differ!", _bassline_scale_degrees[start], realization.get_interval_classes(start), self.get_interval_classes(0))
+                if realization_position < realization_len:
+                    current_realization_interval_classes = realization.get_interval_classes(realization_position)
+                    current_minimal_required_harmony = minimal_required_harmonies[rule_position]
+                    current_rule_interval_classes = self.get_interval_classes(rule_position).union(current_minimal_required_harmony)
+                    print("Current minimal:", current_minimal_required_harmony, " current harmony", current_realization_interval_classes)
+                    if (current_realization_interval_classes.issubset(current_rule_interval_classes)
+                        and current_realization_interval_classes.issuperset(current_minimal_required_harmony)):
+                        explained[rule_position] = True
+                    else:
+                        print("Interval classes differ!", _bassline_scale_degrees[start], realization.get_interval_classes(start), self.get_interval_classes(0))
+                        return [False]
         return explained
-
-    # TODO: zabalit porovnanie do metody (napr. compare_pitch_sets)
-
-
-
-
-
-
-

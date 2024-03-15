@@ -47,9 +47,9 @@ class Ruleset:
         was_not_explained = []
         for idx, result in enumerate(results):
             if result:
-                was_explained.append(str(idx + 1))
+                was_explained.append(str(idx))
             elif not result:
-                was_not_explained.append(str(idx + 1))
+                was_not_explained.append(str(idx))
         assert len(was_explained) + len(was_not_explained) == len(results)
         if len(was_not_explained) == 0:
             result_string = "Congrats. All notes were explained!"

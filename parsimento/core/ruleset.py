@@ -31,12 +31,32 @@ class Ruleset:
         for pitch_idx in range(len(realization.bass_pitches)): # originally (and also the above line) partimento.bass.pitches
             # pitch = part.bass.pitches[i] # we get interval classes of the chord corresponding to the current pitch
             print("Explaining:", pitch_idx)
-
             # we go through the rule and try to find at least one match
             for rule in self.rules:
                 is_explained = rule.apply_rule(realization, pitch_idx)
                 if is_explained:
                     print(rule.origin)
                     explained[pitch_idx] = True
-                    break
         return explained
+
+    def report_results(self, results):
+        """Prints out results of the evaluate method in a legible way."""
+        was_explained = []
+        was_not_explained = []
+        for idx, result in enumerate(results):
+            if result:
+                was_explained.append(str(idx + 1))
+            elif not result:
+                was_not_explained.append(str(idx + 1))
+        assert len(was_explained) + len(was_not_explained) == len(results)
+        if len(was_not_explained) == 0:
+            result_string = "Congrats. All notes were explained!"
+        else:
+            result_string = ("These notes couldn't be explained: "
+               + " ".join(was_not_explained))
+        return result_string
+
+
+
+
+

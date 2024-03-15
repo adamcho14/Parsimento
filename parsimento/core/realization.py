@@ -14,12 +14,7 @@ class Realization:
         self.bass_pitches, self.scale_degrees = self.align()
 
     def get_interval_classes(self, i: int):
-        #bass = self.partimento.bass.pitches[i]
-        bass = self.bass_pitches[i]
-        intervals = []
-        for note in self.realization[chord.Chord][i]:
-            intervals.append(interval.Interval(bass, note).simpleName)
-        return set(intervals)
+        return get_interval_classes(self.bass_pitches[i], self.realization[chord.Chord][i])
 
     def align(self):
         return align(self.partimento, self)
@@ -42,6 +37,13 @@ def align(partimento: Partimento, realization: Realization):
                                          partimento.scale_degrees[idx - unaligned_count - 1])
             unaligned_count += 1
     return aligned_bass_pitches, aligned_scale_degrees
+
+def get_interval_classes(bass_pitch, chord):
+    #bass = self.partimento.bass.pitches[i]
+    intervals = []
+    for note in chord:
+        intervals.append(interval.Interval(bass_pitch, note).simpleName)
+    return set(intervals)
 
 
 

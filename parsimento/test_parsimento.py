@@ -18,6 +18,13 @@ class TestParsimento(unittest.TestCase):
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         self.assertEqual(self.ruleset.evaluate(realization), [True] * 16)
 
+    def test_octave_rule_print_out(self):
+        """Test octave rule in both directions in G major."""
+        filename = "Fenaroli_Octave_G"
+        partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
+        realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
+        self.assertEqual(self.ruleset.report_results(self.ruleset.evaluate(realization)), "Congrats. All notes were explained!")
+
     def test_transposed_octave_rule(self):
         """Test octave rule in both directions, but this time transposed to C major."""
         filename = "Fenaroli_Octave_C"
@@ -53,7 +60,23 @@ class TestParsimento(unittest.TestCase):
         filename = "Romanesca"
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
-        self.assertEqual(self.ruleset.evaluate(realization), [True, True, False, False, False, True, False] + [True] * 5)
+        self.assertEqual(self.ruleset.evaluate(realization), [True, True, False, False, False] + [True] * 7)
+
+    def test_romanesca_print_out(self):
+        """Test end of Fenaroli Book 1 Example 1, including octave rule, cadence and unaligned chords."""
+        filename = "Romanesca"
+        partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
+        realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
+        self.assertEqual(self.ruleset.report_results(self.ruleset.evaluate(realization)), "These notes couldn't be explained: 3 4 5")
+
+    def test_corette_51(self):
+        """Test end of Fenaroli Book 1 Example 1, including octave rule, cadence and unaligned chords."""
+        filename = "Corette_51"
+        partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
+        realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
+        self.assertEqual(self.ruleset.evaluate(realization), [True] * 21)
+
+
 
 
 if __name__ == '__main__':

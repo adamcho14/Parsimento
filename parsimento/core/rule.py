@@ -45,23 +45,28 @@ class Rule:
         _bassline_scale_degrees = realization.scale_degrees
 
         applicable_rule_len = len(rule_bass_notes) - 1
+        realization_len = len(_bassline_scale_degrees)
+
         explained = [False] * applicable_rule_len
 
         matches = True
-        for increment, rule_bass_note in enumerate(rule_bass_notes):
-            idx = start+increment
-            if (idx < len(_bassline_scale_degrees)
-                    and _bassline_scale_degrees[idx] != sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_note)):
+        for rule_position, rule_bass_note in enumerate(rule_bass_notes):
+            realization_position = start + rule_position
+            if (realization_position < realization_len
+                    and _bassline_scale_degrees[realization_position] != sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_note)):
                 matches = False
+                print("Doesn't match at position:", rule_position)
                 break
 
         if matches:
-            for rule_idx in range(applicable_rule_len):
-                if realization.get_interval_classes(start + rule_idx).issubset(self.get_interval_classes(rule_idx)):
-                    explained[rule_idx] = True
+            for rule_position in range(applicable_rule_len):
+                realization_position = start + rule_position
+                if (realization_position < realization_len
+                    and realization.get_interval_classes(realization_position).issubset(self.get_interval_classes(rule_position))):
+                    explained[rule_position] = True
                 else:
-                    print(_bassline_scale_degrees[start], realization.get_interval_classes(start), self.get_interval_classes(0))
-            return explained
+                    print("Interval classes differ!", _bassline_scale_degrees[start], realization.get_interval_classes(start), self.get_interval_classes(0))
+        return explained
 
     # TODO: zabalit porovnanie do metody (napr. compare_pitch_sets)
 

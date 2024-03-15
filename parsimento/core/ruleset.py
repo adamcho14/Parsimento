@@ -33,10 +33,12 @@ class Ruleset:
             print("Explaining:", pitch_idx)
             # we go through the rule and try to find at least one match
             for rule in self.rules:
-                is_explained = rule.apply_rule(realization, pitch_idx)
-                if is_explained:
-                    print(rule.origin)
-                    explained[pitch_idx] = True
+                to_be_explained = rule.apply_rule(realization, pitch_idx)
+                print(rule.origin, to_be_explained)
+                for position, is_explained in enumerate(to_be_explained):
+                        if is_explained:
+                            print(rule.origin)
+                            explained[pitch_idx + position] = True
         return explained
 
     def report_results(self, results):

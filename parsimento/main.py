@@ -12,7 +12,7 @@ def main(args: argparse.Namespace) -> []:
     for rule in args.ruleset_dir:
         ruleset.bulk_upload(rule)
     partimento = core.Partimento(args.partimento_file)
-    realization =  core.Realization(partimento=partimento, filename=args.realization_file)
+    realization = core.Realization(partimento=partimento, filename=args.realization_file)
     realization.realization.show("text")
     return ruleset.evaluate(realization)
 

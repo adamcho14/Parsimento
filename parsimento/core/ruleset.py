@@ -12,7 +12,7 @@ class Ruleset:
         self.rules.append(rule)
     #def remove(self):
 
-    def bulk_upload(self, directory):
+    def bulk_load(self, directory):
         for rule_filename in os.listdir(directory):
             f = os.path.join(directory, rule_filename)
             # checking if it is a file
@@ -57,6 +57,10 @@ class Ruleset:
             result_string = ("These notes couldn't be explained: "
                + " ".join(was_not_explained))
         return result_string
+
+
+def merge_rulesets(ruleset1, ruleset2):
+    raise NotImplementedError
 
 
 

@@ -10,7 +10,7 @@ parser.add_argument("--realization_file", default="realizations/Fenaroli_Octave_
 def main(args: argparse.Namespace) -> []:
     ruleset = core.Ruleset("Ruleset")
     for rule in args.ruleset_dir:
-        ruleset.bulk_upload(rule)
+        ruleset.bulk_load(rule)
     partimento = core.Partimento(args.partimento_file)
     realization = core.Realization(partimento=partimento, filename=args.realization_file)
     realization.realization.show("text")

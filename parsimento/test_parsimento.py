@@ -6,8 +6,8 @@ class TestParsimento(unittest.TestCase):
     def setUp(self):
         self.path_root = os.path.dirname(os.path.abspath(os.curdir)) + "/"
         self.ruleset = core.Ruleset("Fenaroli")
-        self.ruleset.bulk_upload(directory='{}rules/rule_of_the_octave'.format(self.path_root))
-        self.ruleset.bulk_upload(directory='{}rules/cadence'.format(self.path_root))
+        self.ruleset.bulk_load(directory='{}rules/rule_of_the_octave'.format(self.path_root))
+        self.ruleset.bulk_load(directory='{}rules/cadence'.format(self.path_root))
     def tearDown(self):
         pass
 

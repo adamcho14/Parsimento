@@ -8,6 +8,8 @@ class TestParsimento(unittest.TestCase):
         self.ruleset = core.Ruleset("Fenaroli")
         self.ruleset.bulk_load(directory='{}rules/rule_of_the_octave'.format(self.path_root))
         self.ruleset.bulk_load(directory='{}rules/cadence'.format(self.path_root))
+        self.ruleset.bulk_load(directory='{}rules/suspension'.format(self.path_root))
+        self.ruleset.bulk_load(directory='{}rules/quintfall'.format(self.path_root))
     def tearDown(self):
         pass
 
@@ -70,18 +72,33 @@ class TestParsimento(unittest.TestCase):
         self.assertEqual(self.ruleset.report_results(self.ruleset.evaluate(realization)), "These notes couldn't be explained: 2 3 4")
 
     def test_corette_51_orig(self):
-        """Test end of Fenaroli Book 1 Example 1, including octave rule, cadence and unaligned chords."""
+        """An example from a treatise by Corette which can be explained by the system."""
         filename = "Corette_51"
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}_orig.mid".format(self.path_root, filename))
         self.assertEqual(self.ruleset.evaluate(realization), [True] * 21)
 
     def test_corette_51_spoiled_print_out(self):
-        """Test end of Fenaroli Book 1 Example 1, including octave rule, cadence and unaligned chords."""
+        """The same as test_corette_51_orig,
+        but we changed the realization so that it contains an unprepared 5-4 chord in the cadence."""
         filename = "Corette_51"
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}_spoiled.mid".format(self.path_root, filename))
         self.assertEqual(self.ruleset.report_results(self.ruleset.evaluate(realization)), "These notes couldn't be explained: 18")
+
+    def test_corette_52_print_out(self):
+        """Another example from Corette, employing the 8-8-7 bass suspension (sopran cadence bass) and Quintfall ending."""
+        filename = "Corette_52"
+        partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
+        realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
+        self.assertEqual(self.ruleset.report_results(self.ruleset.evaluate(realization)), "Congrats. All notes were explained!")
+
+    def test_corette_52_altered_print_out(self):
+        """The same as test_corette_52_print_out, but the ending simplified in a way that it consists of IV-V-I instead of Quintfall."""
+        filename = "Corette_52_altered"
+        partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
+        realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
+        self.assertEqual(self.ruleset.report_results(self.ruleset.evaluate(realization)), "Congrats. All notes were explained!")
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,6 +1,5 @@
 import argparse
 import core
-from music21 import chord, note
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--ruleset_dir", nargs="*", default=["rules/cadence" ,"rules/rule_of_the_octave"], type=str, help="Rule set directories.")

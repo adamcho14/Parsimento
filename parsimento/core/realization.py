@@ -34,6 +34,7 @@ def align(partimento: Partimento, realization: Realization):
             unaligned_count += 1
     return aligned_bass_pitches, aligned_scale_degrees
 
+
 def get_interval_classes(bass_pitch, rh_harmony):
     intervals = []
     # if we get only one note in the right hand, we need to turn it into an iterable object

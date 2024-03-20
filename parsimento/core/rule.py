@@ -58,27 +58,31 @@ class Rule:
 
         explained = [False] * applicable_rule_len
 
-        is_bass_degree_match = True
+        # We can use a rule only if it matches completely, i.e.:
+        # 1) If the rule isn't longer than the rest of the realization
+        # 2) If all scale degrees match between the rule and the realization
+        # 3) If all harmonies meet the rule's requirements.
+
+        if realization_len - start < applicable_rule_len:
+            return [False]
+
         for rule_position, rule_bass_note in enumerate(rule_bass_notes):
             realization_position = start + rule_position
-            if (realization_position < realization_len
-                    and _bassline_scale_degrees[realization_position] != sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_note)):
-                is_bass_degree_match = False
-                print("Doesn't match at position:", rule_position)
-                return [False]
+            if realization_position < realization_len:
+                if _bassline_scale_degrees[realization_position] != sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_note):
+                    print("Doesn't match at position:", rule_position)
+                    return [False]
 
-        if is_bass_degree_match:
-            for rule_position in range(applicable_rule_len):
-                realization_position = start + rule_position
-                if realization_position < realization_len:
-                    current_realization_interval_classes = realization.get_interval_classes(realization_position)
-                    current_minimal_required_harmony = minimal_required_harmonies[rule_position]
-                    current_rule_interval_classes = self.get_interval_classes(rule_position).union(current_minimal_required_harmony)
-                    print("Current minimal:", current_minimal_required_harmony, " current harmony", current_realization_interval_classes)
-                    if (current_realization_interval_classes.issubset(current_rule_interval_classes)
-                        and current_realization_interval_classes.issuperset(current_minimal_required_harmony)):
-                        explained[rule_position] = True
-                    else:
-                        print("Interval classes differ!", _bassline_scale_degrees[start], realization.get_interval_classes(start), self.get_interval_classes(0))
-                        return [False]
+        for rule_position in range(applicable_rule_len):
+            realization_position = start + rule_position
+            current_realization_interval_classes = realization.get_interval_classes(realization_position)
+            current_minimal_required_harmony = minimal_required_harmonies[rule_position]
+            current_rule_interval_classes = self.get_interval_classes(rule_position).union(current_minimal_required_harmony)
+            print("Current minimal:", current_minimal_required_harmony, " current harmony", current_realization_interval_classes)
+            if (current_realization_interval_classes.issubset(current_rule_interval_classes)
+                and current_realization_interval_classes.issuperset(current_minimal_required_harmony)):
+                explained[rule_position] = True
+            else:
+                print("Interval classes differ!", _bassline_scale_degrees[start], realization.get_interval_classes(start), self.get_interval_classes(0))
+                return [False]
         return explained

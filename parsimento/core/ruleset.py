@@ -1,5 +1,5 @@
-from .rule import *
-from .realization import *
+from .rule import Rule
+from .realization import Realization
 import os
 
 class Ruleset:
@@ -57,7 +57,6 @@ class Ruleset:
             result_string = ("These notes couldn't be explained: "
                + " ".join(was_not_explained))
         return result_string
-
 
 def merge_rulesets(ruleset1, ruleset2):
     raise NotImplementedError

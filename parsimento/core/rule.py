@@ -53,10 +53,10 @@ class Rule:
             for harmony_idx, required_harmony in enumerate(self.rule.parts[2][Rest, Note, Chord]):
                 if not required_harmony.isRest:
                     minimal_required_harmonies[harmony_idx] = get_interval_classes(rule_bass_notes[harmony_idx], required_harmony)
-        print("Minimal:", minimal_required_harmonies)
 
 
-        explained = [False] * applicable_rule_len
+        progression_is_explained = False
+        bass_notes_explained = []
 
         # We can use a rule only if it matches completely, i.e.:
         # 1) If the rule isn't longer than the rest of the realization
@@ -64,25 +64,24 @@ class Rule:
         # 3) If all harmonies meet the rule's requirements.
 
         if realization_len - start < applicable_rule_len:
-            return [False]
+            return None
 
         for rule_position, rule_bass_note in enumerate(rule_bass_notes):
             realization_position = start + rule_position
             if realization_position < realization_len:
                 if _bassline_scale_degrees[realization_position] != sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_note):
-                    print("Doesn't match at position:", rule_position)
-                    return [False]
+                    return None
 
         for rule_position in range(applicable_rule_len):
             realization_position = start + rule_position
             current_realization_interval_classes = realization.get_interval_classes(realization_position)
             current_minimal_required_harmony = minimal_required_harmonies[rule_position]
             current_rule_interval_classes = self.get_interval_classes(rule_position).union(current_minimal_required_harmony)
-            print("Current minimal:", current_minimal_required_harmony, " current harmony", current_realization_interval_classes)
             if (current_realization_interval_classes.issubset(current_rule_interval_classes)
                 and current_realization_interval_classes.issuperset(current_minimal_required_harmony)):
-                explained[rule_position] = True
+                progression_is_explained = True
+                bass_notes_explained.append(realization_position)
             else:
-                print("Interval classes differ!", _bassline_scale_degrees[start], realization.get_interval_classes(start), self.get_interval_classes(0))
-                return [False]
-        return explained
+                return None
+        if progression_is_explained:
+            return bass_notes_explained

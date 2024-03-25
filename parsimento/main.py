@@ -12,7 +12,8 @@ def main(args: argparse.Namespace) -> []:
         ruleset.bulk_load(rule)
     partimento = core.Partimento(args.partimento_file)
     realization = core.Realization(partimento=partimento, filename=args.realization_file)
-    return core.Evaluation().evaluate(realization=realization, ruleset=ruleset)
+    #return core.Evaluation().evaluate(realization=realization, ruleset=ruleset)
+    return core.Evaluation().generate_realizations(partimento, ruleset)
 
 if __name__ == "__main__":
     args = parser.parse_args()

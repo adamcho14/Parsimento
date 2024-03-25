@@ -1,4 +1,5 @@
 from .realization import Realization, get_interval_classes
+from .partimento import scale_degree_analysis
 import music21
 from music21.note import Note, Rest
 from music21.chord import Chord
@@ -15,9 +16,33 @@ class Rule:
         self.rule = music21.converter.parse(musicxml_file)
         self.category = category
         self.origin = musicxml_file
+        self.scale_degrees = scale_degree_analysis("G", "M", self.rule.parts[1].pitches)
+        self.minimal_required_harmonies = self.get_minimal_required_harmonies()
+        self.rule_harmonies = self.get_rule_harmonies()
 
     def get_interval_classes(self, i: int):
         return get_interval_classes(self.rule.parts[1].pitches[i], self.rule.parts[0][Rest, Note, Chord][i])
+
+    def get_rule_harmonies(self):
+        rule_bass_notes = self.rule.parts[1].pitches
+        applicable_rule_len = len(rule_bass_notes)
+        rule_harmonies = [set() for _ in range(applicable_rule_len)]
+        for harmony_idx, harmony in enumerate(self.rule.parts[0][Rest, Note, Chord]):
+            if not harmony.isRest:
+                rule_harmonies[harmony_idx] = self.get_interval_classes(harmony_idx)
+        return rule_harmonies
+
+    def get_minimal_required_harmonies(self):
+        rule_bass_notes = self.rule.parts[1].pitches
+        applicable_rule_len = len(rule_bass_notes) - 1
+        minimal_required_harmonies = [set() for _ in range(applicable_rule_len)]
+        if len(self.rule.parts) > 2:
+            for harmony_idx, required_harmony in enumerate(self.rule.parts[2][Rest, Note, Chord]):
+                if not required_harmony.isRest:
+                    minimal_required_harmonies[harmony_idx] = get_interval_classes(rule_bass_notes[harmony_idx],
+                                                                                   required_harmony)
+        return minimal_required_harmonies
+
 
     def apply_rule(self, realization: Realization, start: int):
         """This method compares the current scale degree with the situation encoded in the rule.
@@ -39,7 +64,6 @@ class Rule:
         # And since we cannot satisfy the rule with the prepared dissonace rule, we have no rule that would explain V^(54).
 
         rule_bass_notes = self.rule.parts[1].pitches
-        sc = MajorScale("G")
 
         # _scale_degrees = realization.partimento.scale_degrees
         _bassline_scale_degrees = realization.scale_degrees
@@ -48,11 +72,7 @@ class Rule:
         realization_len = len(_bassline_scale_degrees)
 
         # Checking for the third part - required notes in the right hand harmony
-        minimal_required_harmonies = [set() for _ in range(applicable_rule_len)]
-        if len(self.rule.parts) > 2:
-            for harmony_idx, required_harmony in enumerate(self.rule.parts[2][Rest, Note, Chord]):
-                if not required_harmony.isRest:
-                    minimal_required_harmonies[harmony_idx] = get_interval_classes(rule_bass_notes[harmony_idx], required_harmony)
+
 
 
         progression_is_explained = False
@@ -69,14 +89,14 @@ class Rule:
         for rule_position, rule_bass_note in enumerate(rule_bass_notes):
             realization_position = start + rule_position
             if realization_position < realization_len:
-                if _bassline_scale_degrees[realization_position] != sc.getScaleDegreeAndAccidentalFromPitch(rule_bass_note):
+                if _bassline_scale_degrees[realization_position] != self.scale_degrees[rule_position]:
                     return None
 
         for rule_position in range(applicable_rule_len):
             realization_position = start + rule_position
             current_realization_interval_classes = realization.get_interval_classes(realization_position)
-            current_minimal_required_harmony = minimal_required_harmonies[rule_position]
-            current_rule_interval_classes = self.get_interval_classes(rule_position).union(current_minimal_required_harmony)
+            current_minimal_required_harmony = self.minimal_required_harmonies[rule_position]
+            current_rule_interval_classes = self.rule_harmonies[rule_position].union(current_minimal_required_harmony)
             if (current_realization_interval_classes.issubset(current_rule_interval_classes)
                 and current_realization_interval_classes.issuperset(current_minimal_required_harmony)):
                 progression_is_explained = True

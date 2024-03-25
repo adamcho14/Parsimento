@@ -32,13 +32,16 @@ class Partimento:
         return self.key_signature + self.tonality
 
     def scale_degree_analysis(self):
-        scale_degrees = []
-        sc = MajorScale(self.key_signature)
-        if self.tonality == "m":
-            # Fenaroli's Octave Rule works with Melodic Minor Scale
-            sc = MelodicMinorScale(self.key_signature)
+        return scale_degree_analysis(self.key_signature, self.tonality, self.bass.pitches)
+
+def scale_degree_analysis(key_signature: str, tonality: str, bass_pitches):
+    scale_degrees = []
+    sc = MajorScale(key_signature)
+    if tonality == "m":
+        # Fenaroli's Octave Rule works with Melodic Minor Scale
+        sc = MelodicMinorScale(key_signature)
 
 
-        for pitch in self.bass.pitches:
-            scale_degrees.append(sc.getScaleDegreeAndAccidentalFromPitch(pitch))
-        return scale_degrees
+    for pitch in bass_pitches:
+        scale_degrees.append(sc.getScaleDegreeAndAccidentalFromPitch(pitch))
+    return scale_degrees

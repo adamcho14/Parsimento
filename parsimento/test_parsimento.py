@@ -20,7 +20,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.print_explained_bass_notes(evaluation), [True] * 16)
+        self.assertEqual(self.evaluation.print_explained(evaluation), [True] * 16)
 
     def test_octave_rule_print_out(self):
         """Test octave rule in both directions in G major."""
@@ -28,7 +28,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.report_results(evaluation), "Congrats. All notes were explained!")
+        self.assertEqual(self.evaluation.print_results(evaluation), "Congrats. All notes were explained!")
 
     def test_transposed_octave_rule(self):
         """Test octave rule in both directions, but this time transposed to C major."""
@@ -36,7 +36,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.print_explained_bass_notes(evaluation), [True] * 16)
+        self.assertEqual(self.evaluation.print_explained(evaluation), [True] * 16)
 
     def test_dandrieu(self):
         """Test Dandrieu's exercise with diminished 5th and cadence"""
@@ -44,7 +44,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.print_explained_bass_notes(evaluation), [True] * 9)
+        self.assertEqual(self.evaluation.print_explained(evaluation), [True] * 9)
 
     def test_alignment_of_dandrieu(self):
         """Test alignment of Dandrieu's exercise.
@@ -54,7 +54,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.print_explained_bass_notes(evaluation), [True] * 9)
+        self.assertEqual(self.evaluation.print_explained(evaluation), [True] * 9)
 
     def test_fenaroli_1_1_end(self):
         """Test end of Fenaroli Book 1 Example 1, including octave rule, cadence and unaligned chords."""
@@ -62,7 +62,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.print_explained_bass_notes(evaluation), [True] * 17)
+        self.assertEqual(self.evaluation.print_explained(evaluation), [True] * 17)
 
     def test_romanesca(self):
         """Test end of Fenaroli Book 1 Example 1, including octave rule, cadence and unaligned chords."""
@@ -70,7 +70,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.print_explained_bass_notes(evaluation), [True, True, False, False, False] + [True] * 7)
+        self.assertEqual(self.evaluation.print_explained(evaluation), [True, True, False, False, False] + [True] * 7)
 
     def test_romanesca_print_out(self):
         """Test end of Fenaroli Book 1 Example 1, including octave rule, cadence and unaligned chords."""
@@ -78,7 +78,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.report_results(evaluation), "These notes couldn't be explained: 2 3 4")
+        self.assertEqual(self.evaluation.print_results(evaluation), "These notes couldn't be explained: 2 3 4")
 
     def test_corette_51_orig(self):
         """An example from a treatise by Corette which can be explained by the system."""
@@ -86,7 +86,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}_orig.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.print_explained_bass_notes(evaluation), [True] * 21)
+        self.assertEqual(self.evaluation.print_explained(evaluation), [True] * 21)
 
     def test_corette_51_spoiled_print_out(self):
         """The same as test_corette_51_orig,
@@ -95,7 +95,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}_spoiled.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.report_results(evaluation), "These notes couldn't be explained: 18")
+        self.assertEqual(self.evaluation.print_results(evaluation), "These notes couldn't be explained: 18")
 
     def test_corette_52_print_out(self):
         """Another example from Corette, employing the 8-8-7 bass suspension (sopran cadence bass) and Quintfall ending."""
@@ -103,7 +103,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.report_results(evaluation), "Congrats. All notes were explained!")
+        self.assertEqual(self.evaluation.print_results(evaluation), "Congrats. All notes were explained!")
 
     def test_corette_52_altered_print_out(self):
         """The same as test_corette_52_print_out, but the ending simplified in a way that it consists of IV-V-I instead of Quintfall."""
@@ -111,7 +111,7 @@ class TestParsimento(unittest.TestCase):
         partimento = core.Partimento("{}basses/{}.musicxml".format(self.path_root, filename))
         realization = core.Realization(partimento, "{}realizations/{}.mid".format(self.path_root, filename))
         evaluation = self.evaluation.evaluate(realization, self.ruleset)
-        self.assertEqual(self.evaluation.report_results(evaluation), "Congrats. All notes were explained!")
+        self.assertEqual(self.evaluation.print_results(evaluation), "Congrats. All notes were explained!")
 
 if __name__ == '__main__':
     unittest.main()

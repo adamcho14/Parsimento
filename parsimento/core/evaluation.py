@@ -76,10 +76,12 @@ class Evaluation:
         _partimento_degrees = partimento.scale_degrees
 
         partimento_len = len(_partimento_degrees)
-        realizations = [[]] * partimento_len
+        realizations = [] * partimento_len
 
         for bass_idx, bass_degree in enumerate(_partimento_degrees):
             for rule in ruleset.rules:
+                progression_end = bass_idx
+                progression_scale_degrees = []
                 _rule_degrees = rule.scale_degrees
                 is_scale_degree_match = True
                 if partimento_len - bass_idx < len(_rule_degrees) - 1:
@@ -88,18 +90,22 @@ class Evaluation:
                     for rule_position, rule_degree in enumerate(rule.scale_degrees):
                         partimento_position = bass_idx + rule_position
                         if partimento_position < partimento_len:
-                            if _partimento_degrees[partimento_position] != _rule_degrees[rule_position]:
+                            if _partimento_degrees[partimento_position] != rule_degree:
                                 is_scale_degree_match = False
+                            else:
+                                progression_end = partimento_position
+                                progression_scale_degrees.append(_partimento_degrees[partimento_position])
                 if is_scale_degree_match:
+                    current_harmony = []
                     for rule_position in range(len(_rule_degrees) - 1):
                         partimento_position = bass_idx + rule_position
                         if partimento_position < partimento_len:
                             current_minimal_required_harmony = rule.minimal_required_harmonies[rule_position]
-                            current_rule_interval_classes = rule.rule_harmonies[rule_position].union(
-                                current_minimal_required_harmony)
-                            realizations[partimento_position].append(current_rule_interval_classes)
-        self.print_realizations(realizations)
+                            current_harmony.append(rule.rule_harmonies[rule_position].union(current_minimal_required_harmony))
+                    current_progression = (bass_idx, progression_end, progression_scale_degrees, current_harmony)
+                    if current_progression not in realizations:
+                        realizations.append(current_progression)
         return realizations
 
     def print_realizations(self, realizations):
-        print(realizations[1])
+        print(realizations)
